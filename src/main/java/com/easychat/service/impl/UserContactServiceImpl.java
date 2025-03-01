@@ -1,9 +1,12 @@
 package com.easychat.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.easychat.entity.dto.SysSettingDto;
 import com.easychat.entity.dto.UserContactSearchResultDto;
 import com.easychat.entity.enums.UserContactStatusEnum;
 import com.easychat.entity.enums.UserContactTypeEnum;
@@ -11,6 +14,7 @@ import com.easychat.entity.po.GroupInfo;
 import com.easychat.entity.po.UserInfo;
 import com.easychat.entity.query.GroupInfoQuery;
 import com.easychat.entity.query.UserInfoQuery;
+import com.easychat.exception.BusinessException;
 import com.easychat.mappers.GroupInfoMapper;
 import com.easychat.mappers.UserInfoMapper;
 import com.easychat.redis.RedisComponent;
@@ -199,52 +203,52 @@ public class UserContactServiceImpl implements UserContactService {
 		resultDto.setStatus(userContact == null ? null : userContact.getStatus());
 		return resultDto;
 	}
-//
-//	@Override
-//	public void addContact(String applyUserId, String receiveUserId, String contactId, Integer contactType, String applyInfo) {
-//		//群人上限判断
-//		if (UserContactTypeEnum.GROUP.getType().equals(contactType)) {
-//			UserContactQuery contactQuery = new UserContactQuery();
-//			contactQuery.setContactId(contactId);
-//			contactQuery.setStatus(UserContactStatusEnum.FRIEND.getStatus());
-//			Integer count = userContactMapper.selectCount(contactQuery);
-//			SysSettingDto sysSettingDto = redisComponet.getSysSetting();
-//			if (count >= sysSettingDto.getMaxGroupMemberCount()) {
-//				throw new BusinessException("成员已满，无法加入");
-//			}
-//		}
-//		Date curDate = new Date();
-//		//同意 双方添加为好友
-//		List<UserContact> contactList = new ArrayList<>();
-//		//申请人添加对方
-//		UserContact userContact = new UserContact();
-//		userContact.setUserId(applyUserId);
-//		userContact.setContactId(contactId);
-//		userContact.setContactType(contactType);
-//		userContact.setCreateTime(curDate);
-//		userContact.setLastUpdateTime(curDate);
-//		userContact.setStatus(UserContactStatusEnum.FRIEND.getStatus());
-//		contactList.add(userContact);
-//		//如果是申请好友 接收人添加申请人  群组不用添加对方为好友
+
+	@Override
+	public void addContact(String applyUserId, String receiveUserId, String contactId, Integer contactType, String applyInfo) {
+		//群人上限判断
+		if (UserContactTypeEnum.GROUP.getType().equals(contactType)) {
+			UserContactQuery contactQuery = new UserContactQuery();
+			contactQuery.setContactId(contactId);
+			contactQuery.setStatus(UserContactStatusEnum.FRIEND.getStatus());
+			Integer count = userContactMapper.selectCount(contactQuery);
+			SysSettingDto sysSettingDto = redisComponent.getSysSetting();
+			if (count >= sysSettingDto.getMaxGroupMemberCount()) {
+				throw new BusinessException("成员已满，无法加入");
+			}
+		}
+		Date curDate = new Date();
+		//同意 双方添加为好友
+		List<UserContact> contactList = new ArrayList<>();
+		//申请人添加对方
+		UserContact userContact = new UserContact();
+		userContact.setUserId(applyUserId);
+		userContact.setContactId(contactId);
+		userContact.setContactType(contactType);
+		userContact.setCreateTime(curDate);
+		userContact.setLastUpdateTime(curDate);
+		userContact.setStatus(UserContactStatusEnum.FRIEND.getStatus());
+		contactList.add(userContact);
+		//如果是申请好友 接收人添加申请人  群组不用添加对方为好友
+		if (UserContactTypeEnum.USER.getType().equals(contactType)) {
+			userContact = new UserContact();
+			userContact.setUserId(receiveUserId);
+			userContact.setContactId(applyUserId);
+			userContact.setContactType(contactType);
+			userContact.setCreateTime(curDate);
+			userContact.setLastUpdateTime(curDate);
+			userContact.setStatus(UserContactStatusEnum.FRIEND.getStatus());
+			contactList.add(userContact);
+		}
+		//批量加入
+		userContactMapper.insertOrUpdateBatch(contactList);
+
+		//如果是好友申请,接收人也添加申请人为联系人
 //		if (UserContactTypeEnum.USER.getType().equals(contactType)) {
-//			userContact = new UserContact();
-//			userContact.setUserId(receiveUserId);
-//			userContact.setContactId(applyUserId);
-//			userContact.setContactType(contactType);
-//			userContact.setCreateTime(curDate);
-//			userContact.setLastUpdateTime(curDate);
-//			userContact.setStatus(UserContactStatusEnum.FRIEND.getStatus());
-//			contactList.add(userContact);
-//		}
-//		//批量加入
-//		userContactMapper.insertOrUpdateBatch(contactList);
-//
-//		//如果是好友申请,接收人也添加申请人为联系人
-//		if (UserContactTypeEnum.USER.getType().equals(contactType)) {
-//			redisComponet.addUserContact(receiveUserId, applyUserId);
+//			redisComponent.addUserContact(receiveUserId, applyUserId);
 //		}
 //		//审核通过，将申请人的联系人添加上 我 或 群组
-//		redisComponet.addUserContact(applyUserId, contactId);
+//		redisComponent.addUserContact(applyUserId, contactId);
 //
 //
 //		//创建会话信息
@@ -369,8 +373,8 @@ public class UserContactServiceImpl implements UserContactService {
 //			messageSend.setContactName(groupInfo.getGroupName());
 //			messageHandler.sendMessage(messageSend);
 //		}
-//	}
-//
+	}
+
 //	@Override
 //	public void removeUserContact(String userId, String contactId, UserContactStatusEnum statusEnum) {
 //		//移除好友

@@ -222,7 +222,7 @@ public class UserContactApplyServiceImpl implements UserContactApplyService {
 
 		//直接加入不用记录申请记录
 		if (JoinTypeEnum.JOIN.getType().equals(joinType)) {
-//			this.userContactService.addContact(applyUserId, receiveUserId, contactId, typeEnum.getType(), applyInfo);
+			this.userContactService.addContact(applyUserId, receiveUserId, contactId, typeEnum.getType(), applyInfo);
 			return joinType;
 		}
 
@@ -285,7 +285,7 @@ public class UserContactApplyServiceImpl implements UserContactApplyService {
 
 		if (UserContactApplyStatusEnum.PASS.getStatus().equals(status)) {
 			//添加联系人
-//			userContactService.addContact(applyInfo.getApplyUserId(), applyInfo.getReceiveUserId(), applyInfo.getContactId(), applyInfo.getContactType(), applyInfo.getApplyInfo());
+			userContactService.addContact(applyInfo.getApplyUserId(), applyInfo.getReceiveUserId(), applyInfo.getContactId(), applyInfo.getContactType(), applyInfo.getApplyInfo());
 			return;
 		}
 

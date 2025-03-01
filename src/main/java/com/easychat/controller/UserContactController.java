@@ -92,33 +92,33 @@ public class UserContactController extends ABaseController {
         return getSuccessResponseVO(null);
     }
 
-//    @RequestMapping("/loadContact")
-//    @GlobalInterceptor
-//    public ResponseVO loadContact(HttpServletRequest request, @NotEmpty String contactType) {
-//        UserContactTypeEnum contactTypeEnum = UserContactTypeEnum.getByName(contactType);
-//        if (null == contactTypeEnum) {
-//            throw new BusinessException(ResponseCodeEnum.CODE_600);
-//        }
-//        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
-//        UserContactQuery contactQuery = new UserContactQuery();
-//        contactQuery.setUserId(tokenUserInfoDto.getUserId());
-//        contactQuery.setContactType(contactTypeEnum.getType());
-//        if (UserContactTypeEnum.USER == contactTypeEnum) {
-//            contactQuery.setQueryContactUserInfo(true);
-//        } else if (UserContactTypeEnum.GROUP == contactTypeEnum) {
-//            contactQuery.setQueryGroupInfo(true);
-//            contactQuery.setExcludeMyGroup(true);
-//        }
-//        contactQuery.setStatusArray(new Integer[]{
-//                UserContactStatusEnum.FRIEND.getStatus(),
-//                UserContactStatusEnum.DEL_BE.getStatus(),
-//                UserContactStatusEnum.BLACKLIST_BE.getStatus()});
-//        contactQuery.setOrderBy("last_update_time desc");
-//        List<UserContact> contactList = userContactService.findListByParam(contactQuery);
-//        return getSuccessResponseVO(contactList);
-//    }
-//
-//
+    @RequestMapping("/loadContact")
+    @GlobalInterceptor
+    public ResponseVO loadContact(HttpServletRequest request, @NotEmpty String contactType) {
+        UserContactTypeEnum contactTypeEnum = UserContactTypeEnum.getByName(contactType);
+        if (null == contactTypeEnum) {
+            throw new BusinessException(ResponseCodeEnum.CODE_600);
+        }
+        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
+        UserContactQuery contactQuery = new UserContactQuery();
+        contactQuery.setUserId(tokenUserInfoDto.getUserId());
+        contactQuery.setContactType(contactTypeEnum.getType());
+        if (UserContactTypeEnum.USER == contactTypeEnum) {
+            contactQuery.setQueryContactUserInfo(true);
+        } else if (UserContactTypeEnum.GROUP == contactTypeEnum) {
+            contactQuery.setQueryGroupInfo(true);
+            contactQuery.setExcludeMyGroup(true);
+        }
+        contactQuery.setStatusArray(new Integer[]{
+                UserContactStatusEnum.FRIEND.getStatus(),
+                UserContactStatusEnum.DEL_BE.getStatus(),
+                UserContactStatusEnum.BLACKLIST_BE.getStatus()});
+        contactQuery.setOrderBy("last_update_time desc");
+        List<UserContact> contactList = userContactService.findListByParam(contactQuery);
+        return getSuccessResponseVO(contactList);
+    }
+
+
 //    @RequestMapping("/getContactInfo")
 //    @GlobalInterceptor
 //    public ResponseVO getContactInfo(HttpServletRequest request, @NotEmpty String contactId) {

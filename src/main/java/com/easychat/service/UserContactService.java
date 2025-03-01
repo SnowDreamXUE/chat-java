@@ -73,17 +73,17 @@ public interface UserContactService {
 
 	UserContactSearchResultDto searchContact(String userId, String contactId);
 
-//	/**
-//	 * 添加联系人
-//	 *
-//	 * @param applyUserId
-//	 * @param receiveUserId
-//	 * @param contactId
-//	 * @param contactType
-//	 * @param applyInfo
-//	 */
-//	void addContact(String applyUserId, String receiveUserId, String contactId, Integer contactType, String applyInfo);
-//
+	/**
+	 * 添加联系人
+	 *
+	 * @param applyUserId
+	 * @param receiveUserId
+	 * @param contactId
+	 * @param contactType
+	 * @param applyInfo
+	 */
+	void addContact(String applyUserId, String receiveUserId, String contactId, Integer contactType, String applyInfo);
+
 //	/**
 //	 * 删除，拉黑用户
 //	 *
