@@ -91,5 +91,5 @@ public interface UserContactApplyService {
 
 	Integer applyAdd(TokenUserInfoDto tokenUserInfoDto, String contactId, String contactType, String applyInfo);
 
-//	void dealWithApply(String userId, Integer applyId, Integer status);
+	void dealWithApply(String userId, Integer applyId, Integer status);
 }

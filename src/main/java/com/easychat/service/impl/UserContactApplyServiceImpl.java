@@ -1,5 +1,6 @@
 package com.easychat.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -256,50 +257,50 @@ public class UserContactApplyServiceImpl implements UserContactApplyService {
 		return joinType;
 	}
 
-//	@Override
-//	@Transactional(rollbackFor = Exception.class)
-//	public void dealWithApply(String userId, Integer applyId, Integer status) {
-//		UserContactApplyStatusEnum statusEnum = UserContactApplyStatusEnum.getByStatus(status);
-//		if (null == statusEnum || UserContactApplyStatusEnum.INIT == statusEnum) {
-//			throw new BusinessException(ResponseCodeEnum.CODE_600);
-//		}
-//
-//		UserContactApply applyInfo = this.userContactApplyMapper.selectByApplyId(applyId);
-//		if (applyInfo == null || !userId.equals(applyInfo.getReceiveUserId())) {
-//			throw new BusinessException(ResponseCodeEnum.CODE_600);
-//		}
-//
-//		//更新申请信息 只能由待处理更新为其他状态
-//		UserContactApply updateInfo = new UserContactApply();
-//		updateInfo.setStatus(statusEnum.getStatus());
-//		updateInfo.setLastApplyTime(System.currentTimeMillis());
-//
-//		UserContactApplyQuery applyQuery = new UserContactApplyQuery();
-//		applyQuery.setApplyId(applyId);
-//		applyQuery.setStatus(UserContactApplyStatusEnum.INIT.getStatus());
-//		Integer count = userContactApplyMapper.updateByParam(updateInfo, applyQuery);
-//		if (count == 0) {
-//			throw new BusinessException(ResponseCodeEnum.CODE_600);
-//		}
-//
-//		if (UserContactApplyStatusEnum.PASS.getStatus().equals(status)) {
-//			//添加联系人
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void dealWithApply(String userId, Integer applyId, Integer status) {
+		UserContactApplyStatusEnum statusEnum = UserContactApplyStatusEnum.getByStatus(status);
+		if (null == statusEnum || UserContactApplyStatusEnum.INIT == statusEnum) {
+			throw new BusinessException(ResponseCodeEnum.CODE_600);
+		}
+
+		UserContactApply applyInfo = this.userContactApplyMapper.selectByApplyId(applyId);
+		if (applyInfo == null || !userId.equals(applyInfo.getReceiveUserId())) {
+			throw new BusinessException(ResponseCodeEnum.CODE_600);
+		}
+
+		//更新申请信息 只能由待处理更新为其他状态
+		UserContactApply updateInfo = new UserContactApply();
+		updateInfo.setStatus(statusEnum.getStatus());
+		updateInfo.setLastApplyTime(System.currentTimeMillis());
+
+		UserContactApplyQuery applyQuery = new UserContactApplyQuery();
+		applyQuery.setApplyId(applyId);
+		applyQuery.setStatus(UserContactApplyStatusEnum.INIT.getStatus());
+		Integer count = userContactApplyMapper.updateByParam(updateInfo, applyQuery);
+		if (count == 0) {
+			throw new BusinessException(ResponseCodeEnum.CODE_600);
+		}
+
+		if (UserContactApplyStatusEnum.PASS.getStatus().equals(status)) {
+			//添加联系人
 //			userContactService.addContact(applyInfo.getApplyUserId(), applyInfo.getReceiveUserId(), applyInfo.getContactId(), applyInfo.getContactType(), applyInfo.getApplyInfo());
-//			return;
-//		}
-//
-//		if (UserContactApplyStatusEnum.BLACKLIST == statusEnum) {
-//			//拉黑 将接收人添加到申请人的联系人中，标记申请人被拉黑
-//			Date curDate = new Date();
-//			UserContact userContact = new UserContact();
-//			userContact.setUserId(applyInfo.getApplyUserId());
-//			userContact.setContactId(applyInfo.getContactId());
-//			userContact.setContactType(applyInfo.getContactType());
-//			userContact.setCreateTime(curDate);
-//			userContact.setStatus(UserContactStatusEnum.BLACKLIST_BE_FIRST.getStatus());
-//			userContact.setLastUpdateTime(curDate);
-//			userContactMapper.insertOrUpdate(userContact);
-//			return;
-//		}
-//	}
+			return;
+		}
+
+		if (UserContactApplyStatusEnum.BLACKLIST == statusEnum) {
+			//拉黑 将接收人添加到申请人的联系人中，标记申请人被拉黑
+			Date curDate = new Date();
+			UserContact userContact = new UserContact();
+			userContact.setUserId(applyInfo.getApplyUserId());
+			userContact.setContactId(applyInfo.getContactId());
+			userContact.setContactType(applyInfo.getContactType());
+			userContact.setCreateTime(curDate);
+			userContact.setStatus(UserContactStatusEnum.BLACKLIST_BE_FIRST.getStatus());
+			userContact.setLastUpdateTime(curDate);
+			userContactMapper.insertOrUpdate(userContact);
+			return;
+		}
+	}
 }

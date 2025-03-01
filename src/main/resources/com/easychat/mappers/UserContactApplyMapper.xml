@@ -74,7 +74,7 @@
 				 and  receive_user_id like concat('%', #{query.receiveUserIdFuzzy}, '%')
 			</if>
 			<if test="query.contactIdFuzzy!= null  and query.contactIdFuzzy!=''">
-				 and  contact_id like concat('%', #{query.contactIdFuzzy}, '%')
+				 and  a.contact_id like concat('%', #{query.contactIdFuzzy}, '%')
 			</if>
 			<if test="query.applyInfoFuzzy!= null  and query.applyInfoFuzzy!=''">
 				 and  apply_info like concat('%', #{query.applyInfoFuzzy}, '%')
@@ -83,19 +83,34 @@
 	</sql>
 
 	<!-- 查询集合-->
-	<select id="selectList" resultMap="base_result_map" >
-		 SELECT <include refid="base_column_list" /> FROM user_contact_apply <include refid="query_condition" />
-		 <if test="query.orderBy!=null">
-			 order by ${query.orderBy}
-		 </if>
-		 <if test="query.simplePage!=null">
-			 limit #{query.simplePage.start},#{query.simplePage.end}
-		 </if>
+	<select id="selectList" resultMap="base_result_map">
+		SELECT
+		a.*
+		<if test="query.queryContactInfo">
+			,CASE
+			WHEN a.contact_type = 0 THEN u.nick_name
+			WHEN a.contact_type = 1 THEN g.group_name
+			END as contactName
+		</if>
+		FROM
+		user_contact_apply a
+		<if test="query.queryContactInfo">
+			LEFT JOIN user_info u ON u.user_id = a.apply_user_id and a.receive_user_id = #{query.receiveUserId}
+			LEFT JOIN group_info g ON g.group_id = a.contact_id and a.receive_user_id = #{query.receiveUserId}
+		</if>
+		<include refid="query_condition"/>
+		<if test="query.orderBy!=null">
+			order by ${query.orderBy}
+		</if>
+		<if test="query.simplePage!=null">
+			limit #{query.simplePage.start},#{query.simplePage.end}
+		</if>
 	</select>
 
 	<!-- 查询数量-->
 	<select id="selectCount" resultType="java.lang.Integer" >
-		 SELECT count(1) FROM user_contact_apply <include refid="query_condition" />
+		 SELECT count(1) FROM user_contact_apply a
+		 <include refid="query_condition" />
 	</select>
 
 	<!-- 插入 （匹配有值的字段）-->

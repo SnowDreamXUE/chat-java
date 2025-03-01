@@ -70,28 +70,28 @@ public class UserContactController extends ABaseController {
         return getSuccessResponseVO(joinType);
     }
 
-//    @RequestMapping("/loadApply")
-//    @GlobalInterceptor
-//    public ResponseVO loadApply(HttpServletRequest request, Integer pageNo) {
-//        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
-//        UserContactApplyQuery userContactApplyQuery = new UserContactApplyQuery();
-//        userContactApplyQuery.setOrderBy("last_apply_time desc");
-//        userContactApplyQuery.setReceiveUserId(tokenUserInfoDto.getUserId());
-//        userContactApplyQuery.setQueryContactInfo(true);
-//        userContactApplyQuery.setPageNo(pageNo);
-//        userContactApplyQuery.setPageSize(PageSize.SIZE15.getSize());
-//        PaginationResultVO resultVO = userContactApplyService.findListByPage(userContactApplyQuery);
-//        return getSuccessResponseVO(resultVO);
-//    }
-//
-//    @RequestMapping("/dealWithApply")
-//    @GlobalInterceptor
-//    public ResponseVO dealWithApply(HttpServletRequest request, @NotNull Integer applyId, @NotNull Integer status) {
-//        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
-//        userContactApplyService.dealWithApply(tokenUserInfoDto.getUserId(), applyId, status);
-//        return getSuccessResponseVO(null);
-//    }
-//
+    @RequestMapping("/loadApply")
+    @GlobalInterceptor
+    public ResponseVO loadApply(HttpServletRequest request, Integer pageNo) {
+        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
+        UserContactApplyQuery userContactApplyQuery = new UserContactApplyQuery();
+        userContactApplyQuery.setOrderBy("last_apply_time desc");
+        userContactApplyQuery.setReceiveUserId(tokenUserInfoDto.getUserId());
+        userContactApplyQuery.setQueryContactInfo(true);
+        userContactApplyQuery.setPageNo(pageNo);
+        userContactApplyQuery.setPageSize(PageSize.SIZE15.getSize());
+        PaginationResultVO resultVO = userContactApplyService.findListByPage(userContactApplyQuery);
+        return getSuccessResponseVO(resultVO);
+    }
+
+    @RequestMapping("/dealWithApply")
+    @GlobalInterceptor
+    public ResponseVO dealWithApply(HttpServletRequest request, @NotNull Integer applyId, @NotNull Integer status) {
+        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
+        userContactApplyService.dealWithApply(tokenUserInfoDto.getUserId(), applyId, status);
+        return getSuccessResponseVO(null);
+    }
+
 //    @RequestMapping("/loadContact")
 //    @GlobalInterceptor
 //    public ResponseVO loadContact(HttpServletRequest request, @NotEmpty String contactType) {
