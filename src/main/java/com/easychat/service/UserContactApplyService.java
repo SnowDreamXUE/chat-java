@@ -2,6 +2,7 @@ package com.easychat.service;
 
 import java.util.List;
 
+import com.easychat.entity.dto.TokenUserInfoDto;
 import com.easychat.entity.query.UserContactApplyQuery;
 import com.easychat.entity.po.UserContactApply;
 import com.easychat.entity.vo.PaginationResultVO;
@@ -87,4 +88,8 @@ public interface UserContactApplyService {
 	 */
 	Integer deleteUserContactApplyByApplyUserIdAndReceiveUserIdAndContactId(String applyUserId,String receiveUserId,String contactId);
 
+
+	Integer applyAdd(TokenUserInfoDto tokenUserInfoDto, String contactId, String contactType, String applyInfo);
+
+//	void dealWithApply(String userId, Integer applyId, Integer status);
 }
