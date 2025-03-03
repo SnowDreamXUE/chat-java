@@ -84,15 +84,15 @@ public interface UserContactService {
 	 */
 	void addContact(String applyUserId, String receiveUserId, String contactId, Integer contactType, String applyInfo);
 
-//	/**
-//	 * 删除，拉黑用户
-//	 *
-//	 * @param userId
-//	 * @param contactId
-//	 * @param statusEnum
-//	 */
-//	void removeUserContact(String userId, String contactId, UserContactStatusEnum statusEnum);
-//
+	/**
+	 * 删除，拉黑用户
+	 *
+	 * @param userId
+	 * @param contactId
+	 * @param statusEnum
+	 */
+	void removeUserContact(String userId, String contactId, UserContactStatusEnum statusEnum);
+
 //	void removeGroupContact(String userId, String groupId, String contactId, UserContactStatusEnum statusEnum);
 //
 //	void addContact4Robot(String userId);

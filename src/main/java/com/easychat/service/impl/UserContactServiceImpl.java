@@ -375,27 +375,27 @@ public class UserContactServiceImpl implements UserContactService {
 //		}
 	}
 
-//	@Override
-//	public void removeUserContact(String userId, String contactId, UserContactStatusEnum statusEnum) {
-//		//移除好友
-//		UserContact userContact = new UserContact();
-//		userContact.setStatus(statusEnum.getStatus());
-//		userContactMapper.updateByUserIdAndContactId(userContact, userId, contactId);
-//
-//		//好友中也移除自己
-//		UserContact friendContact = new UserContact();
-//		if (UserContactStatusEnum.DEL == statusEnum) {
-//			friendContact.setStatus(UserContactStatusEnum.DEL_BE.getStatus());
-//		} else if (UserContactStatusEnum.BLACKLIST == statusEnum) {
-//			friendContact.setStatus(UserContactStatusEnum.BLACKLIST_BE.getStatus());
-//		}
-//		userContactMapper.updateByUserIdAndContactId(friendContact, contactId, userId);
+	@Override
+	public void removeUserContact(String userId, String contactId, UserContactStatusEnum statusEnum) {
+		//移除好友
+		UserContact userContact = new UserContact();
+		userContact.setStatus(statusEnum.getStatus());
+		userContactMapper.updateByUserIdAndContactId(userContact, userId, contactId);
+
+		//好友中也移除自己
+		UserContact friendContact = new UserContact();
+		if (UserContactStatusEnum.DEL == statusEnum) {
+			friendContact.setStatus(UserContactStatusEnum.DEL_BE.getStatus());
+		} else if (UserContactStatusEnum.BLACKLIST == statusEnum) {
+			friendContact.setStatus(UserContactStatusEnum.BLACKLIST_BE.getStatus());
+		}
+		userContactMapper.updateByUserIdAndContactId(friendContact, contactId, userId);
 //		//将我从对方的好友缓存中删除
-//		redisComponet.removeUserContact(contactId, userId);
+//		redisComponent.removeUserContact(contactId, userId);
 //		//将对方从我的列表中删除
-//		redisComponet.removeUserContact(userId, contactId);
-//	}
-//
+//		redisComponent.removeUserContact(userId, contactId);
+	}
+
 //	@Override
 //	public void removeGroupContact(String userId, String groupId, String contactId, UserContactStatusEnum statusEnum) {
 //		GroupInfo groupInfo = groupInfoMapper.selectByGroupId(groupId);
@@ -406,9 +406,9 @@ public class UserContactServiceImpl implements UserContactService {
 //		userContact.setStatus(statusEnum.getStatus());
 //		userContactMapper.updateByUserIdAndContactId(userContact, contactId, groupId);
 //		//将群组从群员列表中删除
-//		redisComponet.removeUserContact(contactId, groupId);
+//		redisComponent.removeUserContact(contactId, groupId);
 //	}
-//
+
 //	@Override
 //	@Transactional(rollbackFor = Exception.class)
 //	public void addContact4Robot(String userId) {

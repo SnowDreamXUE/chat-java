@@ -119,66 +119,66 @@ public class UserContactController extends ABaseController {
     }
 
 
-//    @RequestMapping("/getContactInfo")
-//    @GlobalInterceptor
-//    public ResponseVO getContactInfo(HttpServletRequest request, @NotEmpty String contactId) {
-//        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
-//        UserInfo userInfo = userInfoService.getUserInfoByUserId(contactId);
-//        UserInfoVO userInfoVO = CopyTools.copy(userInfo, UserInfoVO.class);
-//        userInfoVO.setContactStatus(UserContactStatusEnum.NOT_FRIEND.getStatus());
-//        //判断是否是联系人
-//        UserContact userContact = userContactService.getUserContactByUserIdAndContactId(tokenUserInfoDto.getUserId(), contactId);
-//        if (userContact != null) {
-//            userInfoVO.setContactStatus(userContact.getStatus());
-//        }
-//        return getSuccessResponseVO(userInfoVO);
-//    }
-//
-//    @RequestMapping("/getContactUserInfo")
-//    @GlobalInterceptor
-//    public ResponseVO getContactUserInfo(HttpServletRequest request, @NotEmpty String contactId) {
-//        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
-//        UserContact userContact = this.userContactService.getUserContactByUserIdAndContactId(tokenUserInfoDto.getUserId(), contactId);
-//        if (null == userContact || !ArraysUtil.contains(new Integer[]{
-//                UserContactStatusEnum.FRIEND.getStatus(),
-//                UserContactStatusEnum.DEL_BE.getStatus(),
-//                UserContactStatusEnum.BLACKLIST_BE.getStatus(),
-//                UserContactStatusEnum.BLACKLIST_BE_FIRST.getStatus()}, userContact.getStatus())) {
-//            throw new BusinessException(ResponseCodeEnum.CODE_600);
-//        }
-//        UserInfo userInfo = userInfoService.getUserInfoByUserId(contactId);
-//        UserInfoVO userInfoVO = CopyTools.copy(userInfo, UserInfoVO.class);
-//        return getSuccessResponseVO(userInfoVO);
-//    }
-//
-//
-//    /**
-//     * 删除联系人
-//     *
-//     * @param request
-//     * @param contactId
-//     * @return
-//     */
-//    @RequestMapping("/delContact")
-//    @GlobalInterceptor
-//    public ResponseVO delContact(HttpServletRequest request, @NotEmpty String contactId) {
-//        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
-//        userContactService.removeUserContact(tokenUserInfoDto.getUserId(), contactId, UserContactStatusEnum.DEL);
-//        return getSuccessResponseVO(null);
-//    }
-//
-//    /**
-//     * 添加到黑名单
-//     *
-//     * @param request
-//     * @param contactId
-//     * @return
-//     */
-//    @RequestMapping("/addContact2BlackList")
-//    @GlobalInterceptor
-//    public ResponseVO addContact2BlackList(HttpServletRequest request, @NotEmpty String contactId) {
-//        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
-//        userContactService.removeUserContact(tokenUserInfoDto.getUserId(), contactId, UserContactStatusEnum.BLACKLIST);
-//        return getSuccessResponseVO(null);
-//    }
+    @RequestMapping("/getContactInfo")
+    @GlobalInterceptor
+    public ResponseVO getContactInfo(HttpServletRequest request, @NotEmpty String contactId) {
+        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
+        UserInfo userInfo = userInfoService.getUserInfoByUserId(contactId);
+        UserInfoVO userInfoVO = CopyTools.copy(userInfo, UserInfoVO.class);
+        userInfoVO.setContactStatus(UserContactStatusEnum.NOT_FRIEND.getStatus());
+        //判断是否是联系人
+        UserContact userContact = userContactService.getUserContactByUserIdAndContactId(tokenUserInfoDto.getUserId(), contactId);
+        if (userContact != null) {
+            userInfoVO.setContactStatus(userContact.getStatus());
+        }
+        return getSuccessResponseVO(userInfoVO);
+    }
+
+    @RequestMapping("/getContactUserInfo")
+    @GlobalInterceptor
+    public ResponseVO getContactUserInfo(HttpServletRequest request, @NotEmpty String contactId) {
+        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
+        UserContact userContact = this.userContactService.getUserContactByUserIdAndContactId(tokenUserInfoDto.getUserId(), contactId);
+        if (null == userContact || !ArraysUtil.contains(new Integer[]{
+                UserContactStatusEnum.FRIEND.getStatus(),
+                UserContactStatusEnum.DEL_BE.getStatus(),
+                UserContactStatusEnum.BLACKLIST_BE.getStatus(),
+                UserContactStatusEnum.BLACKLIST_BE_FIRST.getStatus()}, userContact.getStatus())) {
+            throw new BusinessException(ResponseCodeEnum.CODE_600);
+        }
+        UserInfo userInfo = userInfoService.getUserInfoByUserId(contactId);
+        UserInfoVO userInfoVO = CopyTools.copy(userInfo, UserInfoVO.class);
+        return getSuccessResponseVO(userInfoVO);
+    }
+
+
+    /**
+     * 删除联系人
+     *
+     * @param request
+     * @param contactId
+     * @return
+     */
+    @RequestMapping("/delContact")
+    @GlobalInterceptor
+    public ResponseVO delContact(HttpServletRequest request, @NotEmpty String contactId) {
+        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
+        userContactService.removeUserContact(tokenUserInfoDto.getUserId(), contactId, UserContactStatusEnum.DEL);
+        return getSuccessResponseVO(null);
+    }
+
+    /**
+     * 添加到黑名单
+     *
+     * @param request
+     * @param contactId
+     * @return
+     */
+    @RequestMapping("/addContact2BlackList")
+    @GlobalInterceptor
+    public ResponseVO addContact2BlackList(HttpServletRequest request, @NotEmpty String contactId) {
+        TokenUserInfoDto tokenUserInfoDto = getTokenUserInfo(request);
+        userContactService.removeUserContact(tokenUserInfoDto.getUserId(), contactId, UserContactStatusEnum.BLACKLIST);
+        return getSuccessResponseVO(null);
+    }
 }
